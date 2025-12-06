@@ -1784,7 +1784,10 @@ def build_complete_memory_graph() -> Dict[str, Any]:
             auth=(
                 os.getenv("MEMORY_NEO4J_USERNAME", "neo4j"),
                 os.getenv("MEMORY_NEO4J_PASSWORD", "password")
-            )
+            ),
+            max_connection_lifetime=300,
+            connection_acquisition_timeout=60,
+            keep_alive=True
         )
         
         with driver.session() as session:

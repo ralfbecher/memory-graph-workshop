@@ -26,7 +26,14 @@ class ProceduralMemoryClient:
                 "Set this to use a separate Neo4j instance for memory/procedural features."
             )
 
-        self.driver = GraphDatabase.driver(uri, auth=(username, password))
+        self.driver = GraphDatabase.driver(
+            uri,
+            auth=(username, password),
+            max_connection_lifetime=300,  # Close connections after 5 minutes
+            max_connection_pool_size=50,
+            connection_acquisition_timeout=60,
+            keep_alive=True
+        )
         self._initialize_schema()
         
         print(f"✓ Procedural memory client initialized using memory Neo4j instance at: {uri}")

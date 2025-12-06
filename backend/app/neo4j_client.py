@@ -19,7 +19,14 @@ class Neo4jClient:
         username = os.getenv("NEO4J_USERNAME", "neo4j")
         password = os.getenv("NEO4J_PASSWORD", "password")
 
-        self.driver = GraphDatabase.driver(uri, auth=(username, password))
+        self.driver = GraphDatabase.driver(
+            uri,
+            auth=(username, password),
+            max_connection_lifetime=300,  # Close connections after 5 minutes
+            max_connection_pool_size=50,
+            connection_acquisition_timeout=60,
+            keep_alive=True
+        )
         
         # Initialize OpenAI client for embeddings
         openai_api_key = os.getenv("OPENAI_API_KEY")
